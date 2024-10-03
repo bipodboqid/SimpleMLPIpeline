@@ -12,10 +12,10 @@ jobs:
       id-token: 'write'
 
     steps:
-    - id: 'Set up Node.js 16'
+    - id: 'set-up-nodejs16'
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '16.x'
 
     - id: 'checkout'
       uses: 'actions/checkout@v4'
@@ -29,5 +29,5 @@ jobs:
     - id: 'upload-folder'
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
-        path: '/uploadFromGitHub'
+        path: 'uploadFromGitHub'
         destination: 'gs://mlpipelineportfolio_bucket_01/'
