@@ -30,4 +30,4 @@ jobs:
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
         path: 'uploadFromGitHub'
-        destination: 'gs://mlpipelineportfolio_bucket_01/'
+        destination: 'mlpipelineportfolio_bucket_01'
