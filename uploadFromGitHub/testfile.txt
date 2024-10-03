@@ -1,0 +1,1 @@
+Test uploading folder to GCS bucket using GitHub Actions
