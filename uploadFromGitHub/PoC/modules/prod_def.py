@@ -19,7 +19,7 @@ if __name__ == "__main__":
 	PROD_PIPELINE_ROOT = 'gs://{}/pipeline_root/{}'.format(PROD_GCS_BUCKET_NAME, PROD_PIPELINE_NAME)
 	PROD_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/uploadFromGitHub/PoC/tfrecord'
 	PROD_ENDPOINT_NAME = 'prediction-' + PROD_PIPELINE_NAME
-	PROD_PIPELINE_DEFINITION_FILE = PROD_PIPELINE_NAME + '_pipeline.json'
+	PROD_PIPELINE_DEFINITION_FILE = '/home/jupyter/SimpleMLPIpeline/uploadFromGitHub/PoC/pipeline_def_json/' + PROD_PIPELINE_NAME + '_pipeline.json'
 	PROD_SERVICE_ACCOUNT = 'pj03-vertex-account@mlpipelineportfolio.iam.gserviceaccount.com'
 	PROD_MODULE_FILE = 'gs://mlpipelineportfolio_bucket_01/uploadFromGitHub/PoC/modules/utils.py'
 	
