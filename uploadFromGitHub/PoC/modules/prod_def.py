@@ -7,6 +7,7 @@ if __name__ == "__main__":
 	start_time = time.time()
 	
 	import os
+	import glob
 	from google.cloud import aiplatform
 	from google.cloud.aiplatform import pipeline_jobs
 	import pipeline
@@ -19,9 +20,19 @@ if __name__ == "__main__":
 	PROD_PIPELINE_ROOT = 'gs://{}/pipeline_root/{}'.format(PROD_GCS_BUCKET_NAME, PROD_PIPELINE_NAME)
 	PROD_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/uploadFromGitHub/PoC/tfrecord'
 	PROD_ENDPOINT_NAME = 'prediction-' + PROD_PIPELINE_NAME
-	PROD_PIPELINE_DEFINITION_FILE = '/home/jupyter/SimpleMLPIpeline/uploadFromGitHub/PoC/pipeline_def_json/' + PROD_PIPELINE_NAME + '_pipeline.json'
+	PROD_PIPELINE_DEFINITION_DIR = '/home/jupyter/SimpleMLPIpeline/uploadFromGitHub/PoC/pipeline_def_json/'
+	PROD_PIPELINE_DEFINITION_FILE = PROD_PIPELINE_DEFINITION_DIR + PROD_PIPELINE_NAME + '_pipeline_' + str(int(start_time)) + '.json'
 	PROD_SERVICE_ACCOUNT = 'pj03-vertex-account@mlpipelineportfolio.iam.gserviceaccount.com'
 	PROD_MODULE_FILE = 'gs://mlpipelineportfolio_bucket_01/uploadFromGitHub/PoC/modules/utils.py'
+	
+	# remove old pipeline definition jsons
+	files = glob.glob(os.path.join(PROD_PIPELINE_DEFINITION_DIR, '*'))
+	for file in files:
+		try:
+			os.remove(file)
+			print(f"Deleted {file}")
+		except Exception as e:
+			print(f"Couldn't delete {file}. error: {e}")
 	
 	# create and get the path of definition json
 	prod_template_path = pipeline.save_pipeline_definition(pipeline_name=PROD_PIPELINE_NAME,
@@ -38,4 +49,3 @@ if __name__ == "__main__":
 	# check json file's timestamp against start time
 	if file_mod_time > start_time:
 		print('Successfully updated/created pipeline definition')
-	
