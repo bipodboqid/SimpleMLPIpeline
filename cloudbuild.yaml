@@ -11,7 +11,7 @@ steps:
           echo "This commit is not on the main branch. Exiting."
           exit 0
         fi
-		
+
   # Docker イメージをビルド
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/mlpipelineportfolio/poc-ph05-test', '.']
