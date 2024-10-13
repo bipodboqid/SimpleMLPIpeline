@@ -2,25 +2,6 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-  # タグのついたコミットのブランチが 'main' か確認
-  - name: 'gcr.io/cloud-builders/git'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        REF_NAME=$(git rev-parse --verify HEAD)
-        echo "current commit $REF_NAME"
-        if [ -z "$REF_NAME" ] ; then
-          echo "HEAD is unspecified. Something wrong."
-          exit 1
-        elif [ "$REF_NAME" != "main" ]; then
-          echo "This branch is not main."
-          exit 1
-        else
-          echo "$REF_NAME was changed. build proceeds"
-          exit 0
-        fi
-
   # Docker イメージをビルド
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/mlpipelineportfolio/poc-ph05-test', '.']
