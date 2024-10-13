@@ -8,24 +8,16 @@ steps:
     args:
       - '-c'
       - |
-        git config --global init.defaultBranch main
-        git remote -v
-        git log --oneline -2
-        git fetch --unshallow
-        git tag
         REF_NAME=$(git rev-parse --verify HEAD)
         echo "current commit $REF_NAME"
-        REF_NAME=$(git log --pretty=format:%H -n 2 | tail -n 1)
-        echo "parent commit $REF_NAME"
-        TAG_NAME=$(git describe --tags $REF_NAME 2>/dev/null)
-        if [ -z "$TAG_NAME" ]; then
-          echo "No tag found for the parent commit."
+        if [ -z "$REF_NAME" ] ; then
+          echo "HEAD is unspecified. Something wrong."
           exit 1
-        elif ! [[ "$TAG_NAME" =~ ^release ]]; then
-          echo "This commit is tagged as $TAG_NAME, not as release. Build process ends with error."
-          exit 1  # ^release にマッチしないタグはスキップ
+        elif [ "$REF_NAME" != "main" ]; then
+          echo "This branch is not main."
+          exit 1
         else
-          echo "$TAG_NAME confirmed. Build Process procedes"
+          echo "$REF_NAME was changed. build proceeds"
           exit 0
         fi
 
