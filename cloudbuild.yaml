@@ -1,0 +1,35 @@
+steps:
+  # タグのついたコミットのブランチが 'main' か確認
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        branch=$(git symbolic-ref --short HEAD)
+        if [ "$branch" != "main" ]; then
+          echo "This commit is not on the main branch. Exiting."
+          exit 0
+        fi
+		
+  # Docker イメージをビルド
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/mlpipelineportfolio/poc-ph05-test', '.']
+
+  # ビルドしたイメージを Container Registry にプッシュ
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/mlpipelineportfolio/poc-ph05-test']
+
+  # Cloud Run にデプロイ
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'poc-ph05-test'
+      - '--image'
+      - 'gcr.io/mlpipelineportfolio/poc-ph05-test'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'asia-northeast1'
+      - '--allow-unauthenticated'
