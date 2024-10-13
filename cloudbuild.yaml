@@ -11,7 +11,7 @@ steps:
         branch=$(git symbolic-ref --short HEAD)
         if [ "$branch" != "main" ]; then
           echo "This commit is not on the main branch. Exiting."
-          exit 0
+          exit 1
         fi
 
   # Docker イメージをビルド
