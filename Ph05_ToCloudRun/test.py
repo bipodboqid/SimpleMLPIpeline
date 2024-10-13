@@ -6,6 +6,7 @@ ENDPOINT_ID = '1706270522494418944'
 GOOGLE_CLOUD_REGION = 'asia-northeast1'
 GOOGLE_CLOUD_PROJECT = 'mlpipelineportfolio'
 image_path = 'mnist_156.jpg'
+print('import and constants configuration ended')
 
 def create_example(image_path):
     features = {
