@@ -5,10 +5,10 @@ FROM python:3.10
 WORKDIR /app
 
 # 必要なパッケージをインストールするrequirements.txtをコピー
-COPY Ph05_ToCloudRun/requirements.txt .
+COPY Ph05_ToCloudRun/requirements.txt /app/
 
 # パッケージをインストール
-RUN pip install --no-cache-dir -r Ph05_ToCloudRun/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # test.py スクリプトと test.jpeg をコピー
 COPY Ph05_ToCloudRun/test.py .
