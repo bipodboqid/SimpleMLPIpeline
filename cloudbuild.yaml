@@ -8,10 +8,12 @@ steps:
     args:
       - '-c'
       - |
+        git config --global init.defaultBranch <name>
         git remote -v
-        git tag
         git status
-        git log --oneline -1
+        git log --oneline -5
+        git fetch --tags
+        git tag
         TAG_NAME=$(git tag --points-at HEAD 2>&1)
         if [ $? -ne 0 ]; then
           echo "This commit is not tagged. error $TAG_NAME"
