@@ -1,5 +1,6 @@
 import tensorflow as tf
 import base64
+import os
 from google.cloud import aiplatform
 
 ENDPOINT_ID = '1706270522494418944'
@@ -32,6 +33,8 @@ def endpoint_predict_sample(
     return prediction
 
 if __name__ == '__main__':
+	port = int(os.environ.get("PORT", 8080))  # PORT環境変数を取得、デフォルトで8080
+	app.run(host='0.0.0.0', port=port)
 	instances = [
 		{
 			'b64': create_example(image_path),
