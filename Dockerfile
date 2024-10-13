@@ -11,8 +11,8 @@ COPY Ph05_ToCloudRun/requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # test.py スクリプトと test.jpeg をコピー
-COPY Ph05_ToCloudRun/test.py .
-COPY Ph05_ToCloudRun/mnist_156.jpg .
+COPY Ph05_ToCloudRun/test.py /app/
+COPY Ph05_ToCloudRun/mnist_156.jpg /app/
 
 # Cloud Buildによるデプロイで実行するためのエントリーポイント
-ENTRYPOINT ["python", "Ph05_ToCloudRun/test.py"]
+ENTRYPOINT ["python", "/app/test.py"]
