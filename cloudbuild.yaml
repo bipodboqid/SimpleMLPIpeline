@@ -8,9 +8,9 @@ steps:
     args:
       - '-c'
       - |
-        TAG_NAME=$(git tag --points-at HEAD)
-        if [ -z "$TAG_NAME" ]; then
-          echo "This commit is not tagged. Build process ends with error."
+        TAG_NAME=$(git tag --points-at HEAD 2>&1)
+        if [ $? -ne 0 ]; then
+          echo "This commit is not tagged. error $TAG_NAME"
           exit 1
         elif ! [[ "$TAG_NAME" =~ ^release ]]; then
           echo "This commit is tagged as $TAG_NAME, not as release. Build process ends with error."
