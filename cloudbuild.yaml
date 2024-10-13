@@ -1,3 +1,6 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 steps:
   # タグのついたコミットのブランチが 'main' か確認
   - name: 'gcr.io/cloud-builders/git'
@@ -8,9 +11,9 @@ steps:
         branch=$(git symbolic-ref --short HEAD)
         if [ "$branch" != "main" ]; then
           echo "This commit is not on the main branch. Exiting."
-          exit 0
+          exit 1
         fi
-		
+
   # Docker イメージをビルド
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/mlpipelineportfolio/poc-ph05-test', '.']
@@ -19,7 +22,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/mlpipelineportfolio/poc-ph05-test']
 
-  # Cloud Run にデプロイ
+  # Cloud Run にデプロイ(changed region due to insane restriction)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -31,5 +34,5 @@ steps:
       - '--platform'
       - 'managed'
       - '--region'
-      - 'asia-northeast1'
+      - 'asia-east1'
       - '--allow-unauthenticated'
