@@ -14,8 +14,10 @@ steps:
         git log --oneline -5
         git fetch --tags
         git tag
-        REF_NAME=$(git log --pretty=%P -n 1 HEAD)
-        echo $REF_NAME
+        REF_NAME=$(git rev-parse HEAD)
+        echo "current commit $REF_NAME"
+        REF_NAME=$(git rev-parse HEAD^)
+        echo "parent commit $REF_NAME"
         TAG_NAME=$(git describe --tags $REF_NAME 2>/dev/null)
         if [ -z "$TAG_NAME" ]; then
           echo "No tag found for the parent commit."
