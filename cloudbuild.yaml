@@ -1,4 +1,5 @@
 steps:
+  # release-test
   # タグのついたコミットのブランチが 'main' か確認
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: 'bash'
