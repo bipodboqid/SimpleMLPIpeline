@@ -9,8 +9,11 @@ steps:
       - '-c'
       - |
         TAG_NAME=$(git describe --tags --exact-match 2>/dev/null)
-        if [ -z "$TAG_NAME" ] || ! [[ "$TAG_NAME" =~ ^release ]]; then
-          echo "This commit is not tagged as release. Build process ends with error."
+        if [ -z "$TAG_NAME" ]; then
+          echo "This commit is not tagged. Build process ends with error."
+          exit 1
+        elif ! [[ "$TAG_NAME" =~ ^release ]]; then
+          echo "This commit is tagged as $TAG_NAME, not as release. Build process ends with error."
           exit 1  # ^release にマッチしないタグはスキップ
         fi
 
