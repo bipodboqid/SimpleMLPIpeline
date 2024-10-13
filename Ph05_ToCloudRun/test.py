@@ -2,6 +2,7 @@ import tensorflow as tf
 import base64
 import os
 from google.cloud import aiplatform
+from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 ENDPOINT_ID = '1706270522494418944'
 GOOGLE_CLOUD_REGION = 'asia-northeast1'
@@ -33,8 +34,15 @@ def endpoint_predict_sample(
     return prediction
 
 if __name__ == '__main__':
-	port = int(os.environ.get("PORT", 8080))  # PORT環境変数を取得、デフォルトで8080
-	app.run(host='0.0.0.0', port=port)
+	
+	# 環境変数 PORT からポート番号を取得 (デフォルトは8080)
+	port = int(os.environ.get("PORT", 8080))
+	# サーバーを起動
+	handler = SimpleHTTPRequestHandler
+	httpd = HTTPServer(("0.0.0.0", port), handler)
+	print(f"Starting server on port {port}...")
+	httpd.serve_forever()
+	
 	instances = [
 		{
 			'b64': create_example(image_path),
