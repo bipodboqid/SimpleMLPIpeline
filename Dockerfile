@@ -14,5 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY Ph05_ToCloudRun/test.py /app/
 COPY Ph05_ToCloudRun/mnist_156.jpg /app/
 
+EXPOSE 8080
+
 # Cloud Buildによるデプロイで実行するためのエントリーポイント
 ENTRYPOINT ["python", "/app/test.py"]
