@@ -8,7 +8,7 @@ steps:
     args:
       - '-c'
       - |
-        TAG_NAME=$(git tag --points-at HEAD 2>/dev/null)
+        TAG_NAME=$(git tag --points-at HEAD)
         if [ -z "$TAG_NAME" ]; then
           echo "This commit is not tagged. Build process ends with error."
           exit 1
