@@ -24,3 +24,5 @@ steps:
       - '--region'
       - 'asia-east1'
       - '--allow-unauthenticated'
+      - '--memory'
+      - '1Gi'
