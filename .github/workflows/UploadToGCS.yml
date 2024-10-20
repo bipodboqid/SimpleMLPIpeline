@@ -44,18 +44,18 @@ jobs:
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
         path: 'uploadFromGitHub/PoC/modules'
-        destination: 'mlpipelineportfolio_bucket_01'
+        destination: 'mlpipelineportfolio_bucket_01/uploadFromGitHub/PoC/'
 
     - id: 'upload-data'
       if: steps.checkchanges.outputs.changes == 'true'
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
         path: 'uploadFromGitHub/PoC/tfrecord'
-        destination: 'mlpipelineportfolio_bucket_01'
+        destination: 'mlpipelineportfolio_bucket_01/uploadFromGitHub/PoC/'
 
     - id: 'upload-json'
       if: steps.checkchanges.outputs.changes == 'true'
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
         path: 'uploadFromGitHub/PoC/pipeline_def_json'
-        destination: 'mlpipelineportfolio_bucket_01'
+        destination: 'mlpipelineportfolio_bucket_01/uploadFromGitHub/PoC/'
