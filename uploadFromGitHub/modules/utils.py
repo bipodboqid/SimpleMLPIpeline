@@ -133,7 +133,7 @@ def _build_keras_model() -> tf.keras.Model:
 	
 	model.compile(
 		optimizer=keras.optimizers.Adam(1e-2),
-		loss=tf.keras.losses.BinaryFocalCross(from_logits=True),
+		loss=tf.keras.losses.BinaryFocalCrossentropy(from_logits=True),
 		metrics=[keras.metrics.F1Score()])
 	
 	model.summary(print_fn=logging.info)
