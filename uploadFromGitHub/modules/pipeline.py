@@ -13,11 +13,12 @@ from tfx.components import ImportExampleGen, StatisticsGen, SchemaGen, Transform
 
 import os
 
-def _create_pipeline(pipeline_name: str, pipeline_root: str, data_root: str,
+def _create_pipeline(pipeline_name: str, pipeline_root: str,
+                     train_data_root: str, test_data_root: str,
                      module_file: str, endpoint_name: str, project_id: str,
                      region: str) -> tfx.dsl.Pipeline:
 	
-	example_gen = ImportExampleGen(input_base=data_root)
+	example_gen = ImportExampleGen(input_base=train_data_root)
 	
 	statistics_gen = StatisticsGen(examples=example_gen.outputs['examples'])
 	
@@ -33,8 +34,8 @@ def _create_pipeline(pipeline_name: str, pipeline_root: str, data_root: str,
 		examples=example_gen.outputs['examples'],
 		schema=schema_gen.outputs['schema'],
 		transform_graph=transform.outputs['transform_graph'],
-		train_args=tfx.proto.TrainArgs(num_steps=100),
-		eval_args=tfx.proto.EvalArgs(num_steps=5))
+		train_args=tfx.proto.TrainArgs(num_steps=24),
+		eval_args=tfx.proto.EvalArgs(num_steps=22))
 	
 	model_resolver = tfx.dsl.Resolver(
             strategy_class=tfx.dsl.experimental.LatestBlessedModelStrategy,

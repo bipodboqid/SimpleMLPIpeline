@@ -6,6 +6,8 @@ from tensorflow_metadata.proto.v0 import schema_pb2
 import tensorflow_transform as tft
 from tensorflow_transform.tf_metadata import schema_utils
 import tensorflow_hub as hub
+import tensorflow_model_analysis as tfma
+from tensorflow_model_analysis.metrics import Metric
 
 from tfx import v1 as tfx
 from tfx_bsl.public import tfxio
@@ -16,10 +18,24 @@ _LABEL_KEY = 'label'
 _FEATURE_KEYS = ['image_raw',]
 
 _TRAIN_BATCH_SIZE = 100
-_EVAL_BATCH_SIZE = 10
+_EVAL_BATCH_SIZE = 20
 
 _IMG_HEIGHT = 299
 _IMG_WIDTH = 299
+
+class CustomF1Score(tf.keras.metrics.Metric):
+	def __init__(self, name='custom_f1_score', **kwargs):
+		super().__init__(name=name, **kwargs)
+		self.f1_score = tf.keras.metrics.F1Score()
+	
+	def update_state(self, y_true, y_pred, sample_weight=None):
+		self.f1_score.update_state(y_true, y_pred, sample_weight)
+	    
+	def result(self):
+		return self.f1_score.result()
+	
+	def reset_state(self):
+		self.f1_score.reset_states()
 
 # TFX Transform will call this function
 def preprocessing_fn(inputs):
@@ -28,7 +44,10 @@ def preprocessing_fn(inputs):
 	raw_image_dataset = tf.sparse.to_dense(inputs[_FEATURE_KEY])
 	image_tensor = tf.map_fn(
 		fn=lambda x : tf.image.resize(
-			tf.io.decode_image(x[0], dtype=tf.float32, channels=3, expand_animations=False),
+			tf.image.convert_image_dtype(
+                tf.io.decode_image(x[0], dtype=tf.float32, channels=3, expand_animations=False),
+                dtype=tf.float32
+            ),
 			[_IMG_HEIGHT, _IMG_WIDTH]),
 		elems=raw_image_dataset,
 		fn_output_signature=tf.TensorSpec((_IMG_HEIGHT, _IMG_WIDTH, 3), dtype=tf.float32, name=None),
@@ -36,12 +55,12 @@ def preprocessing_fn(inputs):
 	outputs[_FEATURE_KEY] = image_tensor
 	label = tf.sparse.to_dense(inputs[_LABEL_KEY])
 	with tf.init_scope():
-		table_keys = ['[0]','[1]']
+		table_keys = [0, 1]
 		initializer = tf.lookup.KeyValueTensorInitializer(
 			keys=table_keys,
-			values=tf.cast(tf.range(len(table_keys)), tf.int64),
-			key_dtype=tf.string,
-			value_dtype=tf.int64)
+			values=tf.cast(tf.range(len(table_keys)), tf.float32),
+			key_dtype=tf.int64,
+			value_dtype=tf.float32)
 		table = tf.lookup.StaticHashTable(initializer, default_value=-1)
 	label = table.lookup(inputs[_LABEL_KEY])
 	label = tf.sparse.to_dense(label)
@@ -113,13 +132,13 @@ def _build_keras_model() -> tf.keras.Model:
 	inputs = [
 		keras.layers.Input(shape=(_IMG_HEIGHT, _IMG_WIDTH, 3), name=_FEATURE_KEY)
 	]
+	GCS_MODEL_PATH = "gs://mlpipelineportfolio_bucket_01/tfhub_models/extracted"
+	# GCS_MODEL_PATH = "gs://mlpipelineportfolio_bucket_01/tfhub_models/inception_v3_feature_vector.tar.gz"
+	# inception_v3 = "https://tfhub.dev/google/tf2-preview/inception_v3/feature_vector/4"
 	
-	inception_v3 = "https://tfhub.dev/google/tf2-preview/inception_v3/feature_vector/4"
-	
-	feature_extractor_model = inception_v3
 	
 	feature_extractor_layer = hub.KerasLayer(
-		feature_extractor_model,
+		GCS_MODEL_PATH,
 		input_shape=(_IMG_HEIGHT, _IMG_WIDTH, 3),
 		trainable=False
 	)
@@ -128,13 +147,14 @@ def _build_keras_model() -> tf.keras.Model:
 		keras.layers.Input(shape=(_IMG_HEIGHT, _IMG_WIDTH, 3), name=_FEATURE_KEY),
 		feature_extractor_layer,
 		tf.keras.layers.Dropout(0.1),
-		tf.keras.layers.Dense(2)
+		tf.keras.layers.Dense(1),
+		tf.keras.layers.Activation('sigmoid')
 	])
 	
 	model.compile(
 		optimizer=keras.optimizers.Adam(1e-2),
-		loss=tf.keras.losses.BinaryFocalCrossentropy(from_logits=True),
-		metrics=[keras.metrics.F1Score()])
+		loss=tf.keras.losses.BinaryFocalCrossentropy(from_logits=False),
+		metrics=[CustomF1Score()])
 	
 	model.summary(print_fn=logging.info)
 	return model
