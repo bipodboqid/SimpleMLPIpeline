@@ -14,7 +14,7 @@ if __name__ == "__main__":
         DEV_TRAIN_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/for_production/tfrecord/plantvillage-train-15percent'
         DEV_TEST_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/for_production/tfrecord/plantvillage-test-5percent'
         DEV_ENDPOINT_NAME = 'prediction-' + DEV_PIPELINE_NAME
-        DEV_PIPELINE_DEFINITION_FILE = '/home/jupyter/SimpleMLPIpeline/uploadFromGitHub/pipeline_definition/dev/' + DEV_PIPELINE_NAME + '_pipeline.json'
+        DEV_PIPELINE_DEFINITION_FILE = '/home/jupyter/SimpleMLPIpeline/Mdl03_DevProdIF_AutoUploadToGCS/pipeline_definition/dev/' + DEV_PIPELINE_NAME + '_pipeline.json'
         DEV_SERVICE_ACCOUNT = 'pj03-vertex-account@mlpipelineportfolio.iam.gserviceaccount.com'
         DEV_MODULE_FILE = 'gs://mlpipelineportfolio_bucket_01/for_production/modules/utils.py'
         
