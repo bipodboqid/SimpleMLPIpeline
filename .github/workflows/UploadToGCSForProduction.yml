@@ -24,7 +24,7 @@ jobs:
 
     - id: 'checkchanges'
       run: |
-          if grep -q '^Mdl03_DevProdIF_AutoUploadToGCS/pipeline-definition/prod' changed_files.txt; then
+          if grep -q '^Mdl03_DevProdIF_AutoUploadToGCS/pipeline_definition/prod' changed_files.txt; then
             echo "Changes detected in pipeline_def_json directory"
             echo "::set-output name=changes::true"
           else
