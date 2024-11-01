@@ -44,44 +44,20 @@ def _create_pipeline(pipeline_name: str, pipeline_root: str,
                     type=tfx.types.standard_artifacts.ModelBlessing)).with_id(
             'latest_blessed_model_resolver')
 	
+	example_gen_for_eval = ImportExampleGen(
+            input_base=test_data_root).with_id('ImportExampleGenForEvaluator')
+	
 	eval_config = tfma.EvalConfig(
             model_specs=[tfma.ModelSpec(label_key='label')],
-            slicing_specs=[
-                    tfma.SlicingSpec(),
-            ],
-            metrics_specs=[
-                    tfma.MetricsSpec(
-                            metrics=[
-                                    tfma.MetricConfig(
-                                            class_name='F1Score',
-                                    )
-                            ],
-                            per_slice_thresholds={
-                                    'F1Score': tfma.PerSliceMetricThresholds(thresholds=[
-                                            tfma.PerSliceMetricThreshold(
-                                                    slicing_specs=[tfma.SlicingSpec()],
-                                                    threshold=tfma.MetricThreshold(
-                                                            value_threshold=tfma.GenericValueThreshold(
-                                                                    lower_bound={'value': 0.6}
-                                                            ),
-                                                            change_threshold=tfma.GenericChangeThreshold(
-                                                                    direction=tfma.MetricDirection.HIGHER_IS_BETTER,
-                                                                    absolute={'value': -1e-10}
-                                                            )
-                                                    )
-                                            )
-                                    ])
-                            }
-                    )
-            ]
-    )
+            slicing_specs=[tfma.SlicingSpec()],
+            metrics_specs=tfma.metrics.default_binary_classification_specs())
+	
 	evaluator = tfx.components.Evaluator(
-            examples=example_gen.outputs['examples'],
+            examples=example_gen_for_eval.outputs['examples'],
             model=trainer.outputs['model'],
             baseline_model=model_resolver.outputs['model'],
             eval_config=eval_config)
 	
-	# NEW: Configuration for pusher.
 	vertex_serving_spec = {
 		'project_id': project_id,
 		'endpoint_name': endpoint_name,
@@ -91,12 +67,12 @@ def _create_pipeline(pipeline_name: str, pipeline_root: str,
 	
 	pusher = tfx.extensions.google_cloud_ai_platform.Pusher(
 		model=trainer.outputs['model'],
-		model_blessing=evaluator.outputs['blessing'],
 		custom_config={
 			tfx.extensions.google_cloud_ai_platform.ENABLE_VERTEX_KEY:True,
 			tfx.extensions.google_cloud_ai_platform.VERTEX_REGION_KEY:region,
 			tfx.extensions.google_cloud_ai_platform.VERTEX_CONTAINER_IMAGE_URI_KEY:serving_image,
 			tfx.extensions.google_cloud_ai_platform.SERVING_ARGS_KEY:vertex_serving_spec})
+	
 	components = [
 		example_gen,
 		statistics_gen,
@@ -104,27 +80,31 @@ def _create_pipeline(pipeline_name: str, pipeline_root: str,
 		transform,
 		trainer,
 		model_resolver,
+		example_gen_for_eval,
 		evaluator,
 		pusher
 	]
-
+	
 	return tfx.dsl.Pipeline(
 		pipeline_name=pipeline_name,
 		pipeline_root=pipeline_root,
 		components=components)
 
-def save_pipeline_definition(pipeline_name: str, pipeline_root: str, data_root: str,
-					   module_file: str, endpoint_name: str, project_id: str,
-					   region: str, pipeline_definition_file: str) -> str:
+def save_pipeline_definition(pipeline_name: str, pipeline_root: str, 
+                             train_data_root: str, test_data_root: str,
+                             module_file: str, endpoint_name: str, project_id: str,
+                             region: str, pipeline_definition_file: str) -> str:
+	
 	runner = tfx.orchestration.experimental.KubeflowV2DagRunner(
 		config=tfx.orchestration.experimental.KubeflowV2DagRunnerConfig(),
 		output_filename=pipeline_definition_file)
-
+	
 	_ = runner.run(
 		_create_pipeline(
 			pipeline_name=pipeline_name,
 			pipeline_root=pipeline_root,
-			data_root=data_root,
+			train_data_root=train_data_root,
+			test_data_root=test_data_root,
 			module_file=module_file,
 			endpoint_name=endpoint_name,
 			project_id=project_id,
