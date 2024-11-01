@@ -22,7 +22,7 @@ if __name__ == "__main__":
 	PROD_TEST_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/for_production/upload_from_github/tfrecord/plantvillage-test-5percent'
 	PROD_ENDPOINT_NAME = 'prediction-' + PROD_PIPELINE_NAME
 	PROD_PIPELINE_DEFINITION_DIR = '/home/jupyter/SimpleMLPIpeline/Mdl03_DevProdIF_AutoUploadToGCS/pipeline_definition/prod/'
-	PROD_PIPELINE_DEFINITION_FILE = PROD_PIPELINE_DEFINITION_DIR + PROD_PIPELINE_NAME + str(start_time) + '_pipeline.json'
+	PROD_PIPELINE_DEFINITION_FILE = PROD_PIPELINE_DEFINITION_DIR + PROD_PIPELINE_NAME + str(int(start_time)) + '_pipeline.json'
 	PROD_SERVICE_ACCOUNT = 'pj03-vertex-account@mlpipelineportfolio.iam.gserviceaccount.com'
 	PROD_MODULE_FILE = 'gs://mlpipelineportfolio_bucket_01/for_production/upload_from_github/modules/utils.py'
 	
