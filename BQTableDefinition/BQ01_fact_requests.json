@@ -1,0 +1,34 @@
+[
+    {
+      "name": "endpoint",
+      "type": "STRING",
+      "description": "foreign key: 'endpoint' in table 'dim_endpoints'"
+    },
+    {
+      "name": "deployed_model_id",
+      "type": "STRING",
+      "description": "foreign key: 'deployed_model_id' in table 'dim_endpoints'"
+    },
+    {
+      "name": "logging_time",
+      "type": "TIMESTAMP",
+      "description": "timestamp of the log entry"
+    },
+    {
+      "name": "request_id",
+      "type": "NUMERIC",
+      "description": "primary key"
+    },
+    {
+      "name": "request_payload",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "base64 encoded string of user-uploaded image"
+    },
+    {
+      "name": "response_payload",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "raw response expressing probability for each class"
+    }
+  ]

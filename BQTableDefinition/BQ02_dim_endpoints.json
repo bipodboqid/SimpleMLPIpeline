@@ -1,0 +1,68 @@
+[
+    {
+      "name": "endpoint",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "primary key"
+    },
+    {
+      "name": "display_name",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "name GCP console displays"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED",
+      "description": "created-at timestamp"
+    },
+    {
+      "name": "updated_at",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "updated-at timestamp"
+    },
+    {
+      "name": "machine_type",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "type of machines employed to perform inferences"
+    },
+    {
+      "name": "min_replica_count",
+      "type": "INT64",
+      "mode": "NULLABLE",
+      "description": "minimum number of machine instances to be kept constantly"
+    },
+    {
+      "name": "max_replica_count",
+      "type": "INT64",
+      "mode": "NULLABLE",
+      "description": "maximum number of machine instances to be launched"
+    },
+    {
+      "name": "accelerator",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "type of GPU machine if one should be used to acclerate inference"
+    },
+    {
+      "name": "model_monitoring",
+      "type": "BOOL",
+      "mode": "NULLABLE",
+      "description": "if Vertex AI Model Monitoring is enabled for this endpoint"
+    },
+    {
+      "name": "mointoring_type",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "type of problems to be detected via montiring: trainin-serving-skew or prediction-drift"
+    },
+    {
+      "name": "alert_threshold",
+      "type": "FLOAT64",
+      "mode": "NULLABLE",
+      "description": "threshold for Model Monitoring to determine when to raise an alert"
+    }
+  ]
