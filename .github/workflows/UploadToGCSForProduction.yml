@@ -1,4 +1,4 @@
-name: Upload for-production folders in 'uploadFromGitHub/' to GCS bucket
+name: Upload for-production folders in 'Mdl03_DevProdIF_AutoUploadToGCS/' to GCS bucket
 on:
   push:
     branches:
@@ -24,7 +24,7 @@ jobs:
 
     - id: 'checkchanges'
       run: |
-          if grep -q '^SimpleMLPIpeline/uploadFromGitHub/pipeline-definition/prod' changed_files.txt; then
+          if grep -q '^Mdl03_DevProdIF_AutoUploadToGCS/pipeline-definition/prod' changed_files.txt; then
             echo "Changes detected in pipeline_def_json directory"
             echo "::set-output name=changes::true"
           else
@@ -43,19 +43,19 @@ jobs:
       if: steps.checkchanges.outputs.changes == 'true'
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
-        path: 'uploadFromGitHub/modules'
+        path: 'Mdl03_DevProdIF_AutoUploadToGCS/modules'
         destination: 'mlpipelineportfolio_bucket_01/for_production/upload_from_github/'
 
     - id: 'upload-data'
       if: steps.checkchanges.outputs.changes == 'true'
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
-        path: 'uploadFromGitHub/tfrecord'
+        path: 'Mdl03_DevProdIF_AutoUploadToGCS/tfrecord'
         destination: 'mlpipelineportfolio_bucket_01/for_production/upload_from_github/'
 
     - id: 'upload-json'
       if: steps.checkchanges.outputs.changes == 'true'
       uses: 'google-github-actions/upload-cloud-storage@v2'
       with:
-        path: 'uploadFromGitHub/pipeline_definition/prod'
+        path: 'Mdl03_DevProdIF_AutoUploadToGCS/pipeline_definition/prod'
         destination: 'mlpipelineportfolio_bucket_01/for_production/upload_from_github/pipeline_definition/'
