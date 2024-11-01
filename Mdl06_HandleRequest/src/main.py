@@ -4,13 +4,12 @@ import os
 from google.cloud import aiplatform
 from fastapi import FastAPI, File, UploadFile
 
-# FastAPI アプリケーションの作成
 app = FastAPI()
 
-ENDPOINT_ID = '1706270522494418944'
+ENDPOINT_ID = '5630365949375807488'
 GOOGLE_CLOUD_REGION = 'asia-northeast1'
 GOOGLE_CLOUD_PROJECT = 'mlpipelineportfolio'
-image_path = 'test_[0]_01.jpg'  # コンテナ内の画像パス
+image_path = 'testdata/test_[0]_01.jpg'  # コンテナ内の作業ディレクトリからの相対パス
 
 # Function to convert image path into TFExample
 def create_example_from_path(image_path):

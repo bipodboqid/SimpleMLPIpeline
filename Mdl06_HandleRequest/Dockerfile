@@ -5,16 +5,16 @@ FROM python:3.10
 WORKDIR /app
 
 # 必要なパッケージをインストールするrequirements.txtをコピー
-COPY Ph05_ToCloudRun/requirements.txt /app/
+COPY Mdl06_HandleRequest/requirements.txt /app/
 
 # パッケージをインストール
 RUN pip install --no-cache-dir -r requirements.txt
 
-# test.py スクリプトと test.jpeg をコピー
-COPY Ph05_ToCloudRun/test.py /app/
-COPY Ph05_ToCloudRun/mnist_156.jpg /app/
+# srcディレクトリとtestdataディレクトリをコピー
+COPY src /app/
+COPY testdata /app/
 
 EXPOSE 8080
 
 # Cloud Buildによるデプロイで実行するためのエントリーポイント
-ENTRYPOINT ["python", "/app/test.py"]
+ENTRYPOINT ["python", "/app/src/main.py"]
