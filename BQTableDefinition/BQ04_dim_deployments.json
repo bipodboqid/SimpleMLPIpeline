@@ -1,0 +1,20 @@
+[
+    {
+      "name": "deployed_model_id",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "deployed model id"
+    },
+    {
+      "name": "endpoint",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "id of endpoint to which the model is deployed"
+    },
+    {
+      "name": "pipeline_run_name",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "fully-qualified pipeline run name"
+    }
+  ]

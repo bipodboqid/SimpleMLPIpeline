@@ -1,0 +1,32 @@
+[
+    {
+      "name": "deployed_model_id",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "primary key"
+    },
+    {
+      "name": "display_name",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "name GCP console displays"
+    },
+    {
+      "name": "created_at",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED",
+      "description": "created-at timestamp"
+    },
+    {
+      "name": "metrics_auc",
+      "type": "FLOAT64",
+      "mode": "REQUIRED",
+      "description": "f1score evaluation of this model"
+    },
+    {
+      "name": "git_commit",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "short hash of the commit including files this model is built on"
+    }
+  ]
