@@ -18,8 +18,8 @@ if __name__ == "__main__":
 	PROD_GCS_BUCKET_NAME = 'mlpipelineportfolio_bucket_01'
 	PROD_PIPELINE_NAME = 'mdl04-pipelineautomation'
 	PROD_PIPELINE_ROOT = 'gs://{}/for_production/pipeline_root/{}'.format(PROD_GCS_BUCKET_NAME, PROD_PIPELINE_NAME)
-	PROD_TRAIN_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/for_production/upload_from_github/tfrecord/plantvillage-train-15percent'
-	PROD_TEST_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/for_production/upload_from_github/tfrecord/plantvillage-test-5percent'
+	PROD_TRAIN_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/for_production/tfrecord/plantvillage-train-15percent'
+	PROD_TEST_DATA_ROOT = 'gs://mlpipelineportfolio_bucket_01/for_production/tfrecord/plantvillage-train-15percent'
 	PROD_ENDPOINT_NAME = 'prediction-' + PROD_PIPELINE_NAME
 	PROD_PIPELINE_DEFINITION_DIR = '/home/jupyter/SimpleMLPIpeline/Mdl03_DevProdIF_AutoUploadToGCS/pipeline_definition/prod/'
 	PROD_PIPELINE_DEFINITION_FILE = PROD_PIPELINE_DEFINITION_DIR + PROD_PIPELINE_NAME + str(int(start_time)) + '_pipeline.json'
