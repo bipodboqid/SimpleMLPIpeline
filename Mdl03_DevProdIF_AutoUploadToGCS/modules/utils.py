@@ -132,10 +132,7 @@ def _build_keras_model() -> tf.keras.Model:
 	inputs = [
 		keras.layers.Input(shape=(_IMG_HEIGHT, _IMG_WIDTH, 3), name=_FEATURE_KEY)
 	]
-	GCS_MODEL_PATH = "gs://mlpipelineportfolio_bucket_01/tfhub_models/extracted"
-	# GCS_MODEL_PATH = "gs://mlpipelineportfolio_bucket_01/tfhub_models/inception_v3_feature_vector.tar.gz"
-	# inception_v3 = "https://tfhub.dev/google/tf2-preview/inception_v3/feature_vector/4"
-	
+	GCS_MODEL_PATH = "gs://mlpipelineportfolio_bucket_01/for_production/tfhub_models/inception_v3_feature_vector/extracted"
 	
 	feature_extractor_layer = hub.KerasLayer(
 		GCS_MODEL_PATH,
