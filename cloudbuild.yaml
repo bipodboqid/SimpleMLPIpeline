@@ -4,11 +4,11 @@ options:
 steps:
   # Docker イメージをビルド
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/mlpipelineportfolio/poc-ph05-test', '.']
+    args: ['build', '-t', 'gcr.io/mlpipelineportfolio/mdl06-handlerequest', '.']
 
   # ビルドしたイメージを Container Registry にプッシュ
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/mlpipelineportfolio/poc-ph05-test']
+    args: ['push', 'gcr.io/mlpipelineportfolio/mdl06-handlerequest']
 
   # Cloud Run にデプロイ
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -16,9 +16,9 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'poc-ph05-test'
+      - 'mdl06-handlerequest'
       - '--image'
-      - 'gcr.io/mlpipelineportfolio/poc-ph05-test'
+      - 'gcr.io/mlpipelineportfolio/mdl06-handlerequest'
       - '--platform'
       - 'managed'
       - '--region'
