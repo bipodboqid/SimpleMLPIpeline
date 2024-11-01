@@ -11,8 +11,8 @@ COPY Mdl06_HandleRequest/requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # srcディレクトリとtestdataディレクトリをコピー
-COPY Mdl06_HandleRequest/src /app/
-COPY Mdl06_HandleRequest/testdata /app/
+COPY Mdl06_HandleRequest/src/ /app/src/
+COPY Mdl06_HandleRequest/testdata/ /app/testdata/
 
 EXPOSE 8080
 
