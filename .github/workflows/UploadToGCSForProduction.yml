@@ -46,13 +46,6 @@ jobs:
         path: 'Mdl03_DevProdIF_AutoUploadToGCS/modules'
         destination: 'mlpipelineportfolio_bucket_01/for_production/upload_from_github/'
 
-    - id: 'upload-data'
-      if: steps.checkchanges.outputs.changes == 'true'
-      uses: 'google-github-actions/upload-cloud-storage@v2'
-      with:
-        path: 'Mdl03_DevProdIF_AutoUploadToGCS/tfrecord'
-        destination: 'mlpipelineportfolio_bucket_01/for_production/upload_from_github/'
-
     - id: 'upload-json'
       if: steps.checkchanges.outputs.changes == 'true'
       uses: 'google-github-actions/upload-cloud-storage@v2'
