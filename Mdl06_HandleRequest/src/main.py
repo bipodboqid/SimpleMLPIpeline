@@ -46,13 +46,15 @@ async def test_predict():
                 'b64': create_example_from_path(image_path),  # コンテナ内の画像を使用
             },
         ]
-        result = endpoint_predict_sample(
+        prediction = endpoint_predict_sample(
             project=GOOGLE_CLOUD_PROJECT,
             location=GOOGLE_CLOUD_REGION,
             instances=instances,
             endpoint=ENDPOINT_ID
         )
-        return {"predictions": result}
+        result = prediction.predictions[0][0]
+        response = f"{result:.2%}"
+        return {"probability of unwellness": response}
     except Exception as e:
         return {"error": str(e)}
 
@@ -70,7 +72,31 @@ async def predict(file: UploadFile = File(...)):
                 location=GOOGLE_CLOUD_REGION,
                 instances=instances,
                 endpoint=ENDPOINT_ID)
-        return {"prediction": prediction}
+        result = prediction.predictions[0][0]
+        response = 'healthy'
+        if result > 0.5:
+                response = 'unwell'
+        return {"prediction": response}
+    except Exception as e:
+        return {'error': str(e)}
+
+# Endpoint to accept inference request
+@app.post("/explain/")
+async def explain(file: UploadFile = File(...)):
+    try: 
+        # 画像ファイルを読み込み
+        image_bytes = await file.read()
+        # 推論用リクエストの作成
+        instances = [{"b64": create_example_from_bytes(image_bytes)}]
+        # Google Cloud AI Predictionにリクエストを送信
+        prediction = endpoint_predict_sample(
+                project=GOOGLE_CLOUD_PROJECT,
+                location=GOOGLE_CLOUD_REGION,
+                instances=instances,
+                endpoint=ENDPOINT_ID)
+        result = prediction.predictions[0][0]
+        response = f"{result:.2%}"
+        return {"probability of unwellness": response}
     except Exception as e:
         return {'error': str(e)}
 
