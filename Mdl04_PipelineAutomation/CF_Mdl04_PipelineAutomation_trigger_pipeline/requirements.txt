@@ -1,0 +1,9 @@
+functions-framework==3.*
+google-cloud-aiplatform==1.67.1
+google-cloud-aiplatform[pipelines]
+requests
+google-cloud-scheduler
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
